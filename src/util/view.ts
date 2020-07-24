@@ -1,13 +1,14 @@
-import {AppResult, AppResultStatus, Artist, Song} from "../model";
-import {PlaylistService} from "../services";
-import {mockData} from "./mock";
-import {greet} from "./utils";
+import { AppResult, AppResultStatus, Artist, Song } from '../model';
+import { PlaylistService } from '../services';
+import { mockData } from './mock';
+import { greet } from './utils';
+import { Playlist } from '../model/Playlist';
 
 export class View {
 
     private dummyData: { artists: Artist[], songs: Song[] };
 
-    constructor (private playlist: PlaylistService) {
+    constructor (private playlist: PlaylistService, private pl: Playlist) {
 
         greet();
         this.dummyData = mockData();
@@ -224,5 +225,125 @@ export class View {
             })
         );
         console.log();
+    }
+
+    findByArtist() {
+
+        console.log();
+        console.log();
+        console.log(`------- Find by artist -------`);
+        console.table(
+            this.playlist
+                .find((s: Song) => s.artist.name.toLowerCase().includes('aedidias'))
+                .map((song: Song) => { return { ...song, artist: song.artist.name } })
+        );
+        console.log();
+    }
+
+    asyncGet() {
+        (async () => {
+            try {
+                const res: Song[] = await this.pl.asyncGet();
+                console.log("[Async/await] Get: ");
+                console.table(res.map((song: Song) => { return { ...song, artist: song.artist.name }; } ));
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+
+        setTimeout(() => {
+            this.pl.asyncGet()
+                .then((result: Song[]) => {
+                    console.log("[ .then() ] Get: ");
+                    console.table(result.map((song: Song) => { return { ...song, artist: song.artist.name }; } ));
+                })
+                .catch((err: Error) => { console.error(err); });
+        }, 2000);
+    }
+
+    asyncExists() {
+
+        (async () => {
+            try {
+                const res: boolean = await this.pl.asyncExists(this.playlist.get()[1]);
+                console.log(`[ Async/await ] Exists: ${res ? 'Exists' : 'Does not exist'}`);
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+
+        setTimeout(() => {
+            this.pl.asyncExists(this.playlist.get()[1])
+                .then((res: boolean) => {
+                    console.log(`[ .then() ] Exists: ${res ? 'Exists' : 'Does not exist'}`);
+                })
+                .catch((err: Error) => { console.error(err); });
+        }, 2000);
+    }
+
+    asyncInsert() {
+
+        (async () => {
+            try {
+                const res: boolean = await this.pl.asyncInsert(new Song('Somename', new Artist('Some artist name', new Date()), 120, 'defualt genre', 100));
+                console.log(`[ Async/await ] Insert: ${res ? 'Success' : 'Failed'}`);
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+
+        setTimeout(() => {
+            this.pl.asyncExists(this.playlist.get()[1])
+                .then((res: boolean) => {
+                    console.log(`[ .then() ] Insert: ${res ? 'Success' : 'Failed'}`);
+                })
+                .catch((err: Error) => { console.error(err); });
+        }, 2000);
+    }
+
+    asyncUpdate() {
+
+        (async () => {
+            try {
+                const res: boolean = await this.pl.asyncUpdate(
+                    (song: Song) => song.name.toLowerCase().includes('ng'),
+                    (song: Song) => song.name = `>>>${song.name}<<<`
+                );
+                console.log(`[ Async/await ] Update: ${res ? 'Success' : 'Failed'}`);
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+
+        setTimeout(() => {
+            this.pl.asyncUpdate(
+                (song: Song) => song.name.toLowerCase().includes('ng'),
+                (song: Song) => song.name = `>>>${song.name}<<<`
+            )
+                .then((res: boolean) => {
+                    console.log(`[ .then() ] Update: ${res ? 'Success' : 'Failed'}`);
+                })
+                .catch((err: Error) => { console.error(err); });
+        }, 2000);
+    }
+
+    asyncDelete() {
+
+        (async () => {
+            try {
+                const res: boolean = await this.pl.asyncDelete((song: Song) => song.duration > 200);
+                console.log(`[ Async/await ] Delete: ${res ? 'Success' : 'Failed'}`);
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+
+        setTimeout(() => {
+            this.pl.asyncDelete((song: Song) => song.duration > 200)
+                .then((res: boolean) => {
+                    console.log(`[ .then() ] Delete: ${res ? 'Success' : 'Failed'}`);
+                })
+                .catch((err: Error) => { console.error(err); });
+        }, 2000);
     }
 }
