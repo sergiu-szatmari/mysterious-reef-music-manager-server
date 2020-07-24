@@ -1,0 +1,17 @@
+{
+  "name": "week1-ts",
+  "version": "1.0.0",
+  "description": "Typescript assignment @ Tapptitude internship",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "clear && npm run build && node ./build/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sergiu",
+  "license": "ISC",
+  "dependencies": {
+    "@types/vorpal": "^1.12.0",
+    "vorpal": "^1.12.0"
+  }
+}
