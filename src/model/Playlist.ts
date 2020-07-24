@@ -88,7 +88,7 @@ export class Playlist extends AEntity implements ICollection<Song> {
         }, 2000);
     }
 
-    async asyncUpdate(
+    asyncUpdate(
         condition: (s: Song) => boolean,
         action: (toBeUpdated: Song) => void,
         updateOne: boolean = false): Promise<boolean> {
