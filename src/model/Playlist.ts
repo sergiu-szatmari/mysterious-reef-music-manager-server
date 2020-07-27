@@ -1,14 +1,17 @@
-import { ICollection } from '../interface';
-import { AbstractEntity } from './AbstractEntity';
+import {ICollection, IEntity} from '../interface';
+// import { AbstractEntity } from './AbstractEntity';
 import { Song } from '.';
+import {generateId} from "../util";
 
-export class Playlist extends AbstractEntity implements ICollection<Song> {
+export class Playlist implements IEntity, ICollection<Song> {//extends AbstractEntity implements ICollection<Song> {
 
+    public readonly id: string;
     private readonly songs: Song[];
 
-    constructor(name: string) {
+    constructor(public name: string) {
 
-        super(name);
+        // super(name);
+        this.id = generateId();
         this.songs = Array();
     }
 

@@ -1,12 +1,16 @@
-import { AbstractEntity } from './AbstractEntity';
+// import { AbstractEntity } from './AbstractEntity';
+import {IEntity} from "../interface";
+import {generateId} from "../util";
 
-export class Artist extends AbstractEntity {
+export class Artist implements IEntity { //extends AbstractEntity {
+
+    public readonly id: string;
 
     constructor(
         name: string,
         public birthDate: Date,
         public originCountry: string = 'Unknown') {
 
-        super(name);
+        this.id = generateId();
     }
 }

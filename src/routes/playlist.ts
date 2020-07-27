@@ -2,22 +2,30 @@ import express, {Request, Response, Router} from 'express';
 
 import { RequestValidator } from '../middlewares';
 import { playlistService } from '../services';
+import {Song} from "../model";
 
 export const router: Router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req: Request, res: Response) => {
 
-    console.log('get reached');
-    return res.status(200).json({ message: "Not yet implemented" });
+    try {
+        const result = await playlistService.get();
+        playlistService.log();
+
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ message: `Exception occured: ${err.message}`});
+    }
 });
 
-router.get('/:playlistId', async (req: Request, res: Response) => {
+router.get('/:playlistName', async (req: Request, res: Response) => {
 
-    const playlistId = req.params.playlistId;
+    const playlistName = req.params.playlistName;
     try {
-        if (!playlistId) throw new Error('No playlist ID provided');
+        if (!playlistName) throw new Error('No playlist ID provided');
 
-        const result = await playlistService.findOne({ id: playlistId });
+        // const result = await playlistService.findOne({ id: playlistId });
+        const result = await playlistService.findOne(playlistName);
 
         return !!result ?
             res.status(200).json(result) :
@@ -32,6 +40,16 @@ router.post('/', RequestValidator.validatePlaylist, async (req: Request, res: Re
 
     console.log(`Received name "${req.body.name}" for creating new playlist`);
 
+    try {
+
+        const { name } = req.body;
+        const result = await playlistService.addPlaylist(name);
+
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
+
     return res.status(200).json({ message: "Not yet implemented" });
 });
 
@@ -40,7 +58,14 @@ router.patch('/:playlistId', RequestValidator.validatePlaylist, async (req, res)
     const { name } = req.body;
     const { playlistId } = req.params;
 
-    console.log(`Playlist #${playlistId}'s name will be changed to "${name}"`);
+    try {
+
+        const result = await playlistService.renamePlaylist(playlistId, name);
+        return res.sendStatus(200);
+    } catch (err) {
+
+        return res.status(500).json({ message: err.message });
+    }
 
     return res.status(200).json({ message: "Not yet implemented" });
 });

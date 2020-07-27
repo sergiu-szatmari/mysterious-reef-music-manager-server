@@ -20,8 +20,8 @@ export function greet() {
 
 export enum ApiPaths {
 
-    PLAYLIST    = '/playlist',
-    SONG        = '/song',
-    ARTIST      = '/artist',
-    LIBRARY     = '/library',
+    PLAYLIST    = '/playlists',
+    SONG        = '/songs',
+    ARTIST      = '/artists',
+    LIBRARY     = '/libraries',
 }

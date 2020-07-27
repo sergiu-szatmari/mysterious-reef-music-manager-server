@@ -11,6 +11,7 @@ const app: Express = express();
 const prefix: string = process.env.PREFIX || "/backupApi";
 
 app.use(logger('dev'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));

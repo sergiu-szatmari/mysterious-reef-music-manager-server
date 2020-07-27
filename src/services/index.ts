@@ -1,1 +1,1 @@
-export { PlaylistService } from './playlist';
+export { playlistService } from './playlist';

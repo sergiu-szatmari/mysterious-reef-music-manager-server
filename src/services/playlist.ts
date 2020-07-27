@@ -3,76 +3,43 @@ import { AppResultStatus, Song } from '../model';
 import { IService } from '../interface';
 
 class PlaylistService implements IService<Song>{
-// export class PlaylistService implements IService<Song>{
 
-    constructor(private model: Playlist) { }
+    private playlists: Playlist[];
 
-    get name() { return this.model.name; }
+    constructor(private model: Playlist[] | null = null) {
 
-    get(): Song[] { return this.model.get(); }
+        this.playlists = Array();
 
-    find(condition: (s: Song) => boolean, paging: { page: number, length: number } | null = null): Song[] {
-        return this.model.find(condition, paging);
+        if (!!model) model.forEach(playlist => this.playlists.push(playlist));
     }
 
-    findOne(condition: (s: Song) => boolean): Song | null {
+    get(): Playlist[] { return this.playlists; };
 
-        return this.model.findOne(condition);
+    findOne(name: string): Playlist | null {
+        return this.playlists.filter(playlist => playlist.name === name)[0] ?? null;
     }
 
-    add(song: Song):
-        { status: AppResultStatus, data: any | null, message: string | null } {
-
-        if (!song) return { status: AppResultStatus.ERROR, data: null, message: 'No song entity provided' };
-
-        return this.model.insert(song) ?
-            { status: AppResultStatus.OK, data: null, message: 'Inserted' } :
-            { status: AppResultStatus.ERROR, data: null, message: `Inserting song ${song.name} failed` };
-
+    addPlaylist(name: string): void {
+        this.playlists.push(new Playlist(name));
     }
 
-    updateOne(condition: (s: Song) => boolean, action: (s: Song) => void):
-        { status: AppResultStatus, data: any | null, message: string | null } {
-
-        return this.model.update(condition, action, true) ?
-            { status: AppResultStatus.OK, data: null, message: 'Update successful' } :
-            { status: AppResultStatus.ERROR, data: null, message: 'Update failed' };
+    addSongToPlaylist(song: Song, name: string): void {
+        this.playlists.forEach(playlist => {
+            if (playlist.name === name) playlist.insert(song);
+        });
     }
 
-    updateMany(condition: (s: Song) => boolean, action: (s: Song) => void):
-        { status: AppResultStatus, data: any | null, message: string | null } {
-
-        return this.model.update(condition, action) ?
-            { status: AppResultStatus.OK, data: null, message: 'updateMany successful' } :
-            { status: AppResultStatus.ERROR, data: null, message: 'Update failed' };
+    log() {
+        this.playlists.forEach(pl => console.table(pl));
     }
 
-    deleteOne(condition: (s: Song) => boolean):
-        { status: AppResultStatus, data: any | null, message: string | null } {
-
-        return this.model.delete(condition) ?
-            { status: AppResultStatus.OK, data: null, message: 'deleteOne successful' } :
-            { status: AppResultStatus.ERROR, data: null, message: 'deleteOne failed' };
-    }
-
-    deleteMany(condition: (s: Song) => boolean):
-        { status: AppResultStatus, data: any | null, message: string | null } {
-
-        return this.model.delete(condition, false) ?
-            { status: AppResultStatus.OK, data: null, message: 'deleteMany successful' } :
-            { status: AppResultStatus.ERROR, data: null, message: 'deleteMany failed' };
-    }
-
-    filter(filterCondition: (entity: Song) => boolean): Song[] {
-        return this.find(filterCondition);
-    }
-
-    sort(sortCondition: (a: Song, b: Song) => number, providedArray: Song[] | null = null): Song[] {
-
-        return !!providedArray ?
-            providedArray.sort(sortCondition) :
-            this.get().sort(sortCondition);
+    renamePlaylist(id: string, newName: string): void {
+        this.playlists.forEach(playlist => {
+            if (playlist.id === id) {
+                playlist.name = newName;
+            }
+        })
     }
 }
 
-export const playlistService: PlaylistService = new PlaylistService(new Playlist('My playlist 1'));
+export const playlistService: PlaylistService = new PlaylistService();
