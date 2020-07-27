@@ -1,46 +1,29 @@
-import { View } from './src/util';
-import { Playlist } from './src/model/Playlist';
-import { PlaylistService } from './src/services';
+import 'dotenv/config';
 
-const app = () => {
+import express, { Express, Router } from 'express';
+import path from 'path';
+import logger from 'morgan';
 
-    const pl = new Playlist('My playlist 1');
-    const playlist = new PlaylistService(pl);
-    const view = new View(playlist, pl);
+import { playlistRouter } from './src/routes';
+import { ApiPaths } from "./src/util";
 
-    view.addMockData();
-    view.get();
-    // view.remove();
-    // view.updateOne();
-    // view.getPaged1();
-    // view.getPaged2();
-    // view.getNameContainsNg();
-    // view.getNameContainsNgPaged();
-    // view.get();
-    // view.findOne();
-    // view.updateMany();
-    // view.updateMany2();
-    // view.deleteMany();
-    // view.sortBy1();
-    // view.sortBy2();
-    // view.findByArtist();
+const app: Express = express();
+const prefix: string = process.env.PREFIX || "/backupApi";
 
-    console.log();
-    console.log();
-    console.log('=================================================================================================================');
-    console.log('============================================= ASYNC/AWAIT + .THEN() =============================================');
-    console.log('=================================================================================================================');
-    console.log();
-    console.log();
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-    view.asyncGet();
-    view.asyncExists();
-    view.asyncInsert();
-    view.asyncUpdate();
-    view.asyncDelete();
-    view.asyncGet();
-    setTimeout(() => { view.asyncGet(); }, 2000);
+app.get('/', (req, res) => { return res.status(200).json({ message: 'Welcome to MyMusicApp'}) });
 
-};
+const apiRouter: Router = express.Router();
 
-app();
+apiRouter.use(ApiPaths.PLAYLIST, playlistRouter);
+app.use(prefix, apiRouter);
+
+app.use((err: any, req: any, res: any, next: any) => {
+    return res.status(500).json({ message: `Unexpected error: "${err.message ?? ''}"` });
+});
+
+export { app };

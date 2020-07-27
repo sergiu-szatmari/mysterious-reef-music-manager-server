@@ -1,6 +1,6 @@
-import { AEntity } from '../abstract';
+import { AbstractEntity } from './AbstractEntity';
 
-export class Artist extends AEntity {
+export class Artist extends AbstractEntity {
 
     constructor(
         name: string,

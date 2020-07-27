@@ -1,7 +1,7 @@
-import { AEntity } from '../abstract';
+import { AbstractEntity } from './AbstractEntity';
 import { Artist } from './Artist';
 
-export class Song extends AEntity {
+export class Song extends AbstractEntity {
 
     constructor(
         name: string,

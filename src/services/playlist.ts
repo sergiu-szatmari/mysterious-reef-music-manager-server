@@ -1,19 +1,17 @@
 import { Playlist } from '../model/Playlist';
-import { AppResult, AppResultStatus, Song } from '../model';
+import { AppResultStatus, Song } from '../model';
 import { IService } from '../interface';
 
-export class PlaylistService implements IService<Song>{
+class PlaylistService implements IService<Song>{
+// export class PlaylistService implements IService<Song>{
 
     constructor(private model: Playlist) { }
 
     get name() { return this.model.name; }
 
-    get(): Song[] {
-        return this.model.get();
-    }
+    get(): Song[] { return this.model.get(); }
 
     find(condition: (s: Song) => boolean, paging: { page: number, length: number } | null = null): Song[] {
-
         return this.model.find(condition, paging);
     }
 
@@ -22,42 +20,47 @@ export class PlaylistService implements IService<Song>{
         return this.model.findOne(condition);
     }
 
-    add(song: Song): AppResult {
+    add(song: Song):
+        { status: AppResultStatus, data: any | null, message: string | null } {
 
-        if (!song) return new AppResult(AppResultStatus.ERROR, null, 'No song entity provided');
+        if (!song) return { status: AppResultStatus.ERROR, data: null, message: 'No song entity provided' };
 
         return this.model.insert(song) ?
-            new AppResult(AppResultStatus.OK, null, 'Inserted') :
-            new AppResult(AppResultStatus.ERROR, null, `Inserting song ${song.name} failed`);
+            { status: AppResultStatus.OK, data: null, message: 'Inserted' } :
+            { status: AppResultStatus.ERROR, data: null, message: `Inserting song ${song.name} failed` };
 
     }
 
-    updateOne(condition: (s: Song) => boolean, action: (s: Song) => void): AppResult {
+    updateOne(condition: (s: Song) => boolean, action: (s: Song) => void):
+        { status: AppResultStatus, data: any | null, message: string | null } {
 
         return this.model.update(condition, action, true) ?
-            new AppResult(AppResultStatus.OK, null, 'Update successful') :
-            new AppResult(AppResultStatus.ERROR, null, 'Update failed');
+            { status: AppResultStatus.OK, data: null, message: 'Update successful' } :
+            { status: AppResultStatus.ERROR, data: null, message: 'Update failed' };
     }
 
-    updateMany(condition: (s: Song) => boolean, action: (s: Song) => void): AppResult {
+    updateMany(condition: (s: Song) => boolean, action: (s: Song) => void):
+        { status: AppResultStatus, data: any | null, message: string | null } {
 
         return this.model.update(condition, action) ?
-            new AppResult(AppResultStatus.OK, null, 'updateMany successful') :
-            new AppResult(AppResultStatus.ERROR, null, 'Update failed');
+            { status: AppResultStatus.OK, data: null, message: 'updateMany successful' } :
+            { status: AppResultStatus.ERROR, data: null, message: 'Update failed' };
     }
 
-    deleteOne(condition: (s: Song) => boolean): AppResult {
+    deleteOne(condition: (s: Song) => boolean):
+        { status: AppResultStatus, data: any | null, message: string | null } {
 
         return this.model.delete(condition) ?
-            new AppResult(AppResultStatus.OK, null, 'deleteOne successful') :
-            new AppResult(AppResultStatus.ERROR, null, 'deleteOne failed');
+            { status: AppResultStatus.OK, data: null, message: 'deleteOne successful' } :
+            { status: AppResultStatus.ERROR, data: null, message: 'deleteOne failed' };
     }
 
-    deleteMany(condition: (s: Song) => boolean): AppResult {
+    deleteMany(condition: (s: Song) => boolean):
+        { status: AppResultStatus, data: any | null, message: string | null } {
 
         return this.model.delete(condition, false) ?
-            new AppResult(AppResultStatus.OK, null, 'deleteMany successful') :
-            new AppResult(AppResultStatus.ERROR, null, 'deleteMany failed');
+            { status: AppResultStatus.OK, data: null, message: 'deleteMany successful' } :
+            { status: AppResultStatus.ERROR, data: null, message: 'deleteMany failed' };
     }
 
     filter(filterCondition: (entity: Song) => boolean): Song[] {
@@ -70,6 +73,6 @@ export class PlaylistService implements IService<Song>{
             providedArray.sort(sortCondition) :
             this.get().sort(sortCondition);
     }
-
-
 }
+
+export const playlistService: PlaylistService = new PlaylistService(new Playlist('My playlist 1'));

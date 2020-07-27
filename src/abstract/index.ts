@@ -1,1 +1,0 @@
-export { AEntity } from './aEntity';

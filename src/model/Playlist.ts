@@ -1,8 +1,8 @@
 import { ICollection } from '../interface';
-import { AEntity } from '../abstract';
+import { AbstractEntity } from './AbstractEntity';
 import { Song } from '.';
 
-export class Playlist extends AEntity implements ICollection<Song> {
+export class Playlist extends AbstractEntity implements ICollection<Song> {
 
     private readonly songs: Song[];
 

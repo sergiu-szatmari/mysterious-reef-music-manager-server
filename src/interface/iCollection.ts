@@ -2,22 +2,19 @@ import { Song } from "../model";
 
 export interface ICollection<T> {
 
-    exists(entity: T): boolean;
-    asyncExists(entity: T): Promise<boolean>;
+    find(condition: (s: T) => boolean, paging: { page: number, length: number }): T[];
+    findOne(condition: (s: T) => boolean): T | null;
 
     get(): T[];
-    asyncGet(): Promise<T[]>;
-
-    find(condition: (s: Song) => boolean, paging: { page: number, length: number }): T[];
-
-    findOne(condition: (s: Song) => boolean): T | null;
-
+    exists(entity: T): boolean;
     insert(entity: T): boolean;
+    update(condition: (s: T) => boolean, action: (toBeUpdated: T) => void): boolean;
+    delete(condition: (s: T) => boolean): boolean;
+
+    asyncGet(): Promise<T[]>;
+    asyncExists(entity: T): Promise<boolean>;
     asyncInsert(entity: T): Promise<boolean>;
+    asyncUpdate(condition: (s: T) => boolean, action: (toBeUpdated: T) => void): Promise<boolean>;
+    asyncDelete(condition: (s: T) => boolean):Promise <boolean>;
 
-    update(condition: (s: Song) => boolean, action: (toBeUpdated: Song) => void): boolean;
-    asyncUpdate(condition: (s: Song) => boolean, action: (toBeUpdated: Song) => void): Promise<boolean>;
-
-    delete(condition: (s: Song) => boolean): boolean;
-    asyncDelete(condition: (s: Song) => boolean):Promise <boolean>;
 }

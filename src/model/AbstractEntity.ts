@@ -1,7 +1,7 @@
 import { IEntity } from '../interface';
 import { generateId } from '../util';
 
-export abstract class AEntity implements IEntity {
+export abstract class AbstractEntity implements IEntity {
 
     public readonly id: string;
 

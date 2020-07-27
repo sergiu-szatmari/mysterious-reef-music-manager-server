@@ -17,3 +17,11 @@ export function greet() {
     console.log();
     console.log();
 }
+
+export enum ApiPaths {
+
+    PLAYLIST    = '/playlist',
+    SONG        = '/song',
+    ARTIST      = '/artist',
+    LIBRARY     = '/library',
+}

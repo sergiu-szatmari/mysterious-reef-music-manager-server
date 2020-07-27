@@ -1,4 +1,4 @@
-import { AppResult, AppResultStatus, Artist, Song } from '../model';
+import { AppResultStatus, Artist, Song } from '../model';
 import { PlaylistService } from '../services';
 import { mockData } from './mock';
 import { greet } from './utils';
@@ -20,7 +20,7 @@ export class View {
         console.log("------- Adding mock data -------");
         this.dummyData.songs.forEach(song => {
 
-            let res: AppResult = this.playlist.add(song);
+            let res: { status: AppResultStatus, data: any | null, message: string | null } = this.playlist.add(song);
 
             switch (res.status) {
                 case AppResultStatus.ERROR:
