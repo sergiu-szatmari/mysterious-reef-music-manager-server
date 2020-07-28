@@ -3,27 +3,34 @@ import 'dotenv/config';
 import express, { Express, Router } from 'express';
 import path from 'path';
 import logger from 'morgan';
+import cookieParser from 'cookie-parser';
 
-import { playlistRouter } from './src/routes';
-import { ApiPaths } from "./src/util";
+import { ApiPaths } from './src/util';
+import { playlistRouter, songRouter,
+    artistRouter, libraryRouter } from './src/routes';
 
 const app: Express = express();
-const prefix: string = process.env.PREFIX || "/backupApi";
+const prefix: string = process.env.PREFIX || '/backupApi';
 
 app.use(logger('dev'));
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => { return res.status(200).json({ message: 'Welcome to MyMusicApp'}) });
 
 const apiRouter: Router = express.Router();
 
 apiRouter.use(ApiPaths.PLAYLIST, playlistRouter);
+apiRouter.use(ApiPaths.SONG, songRouter);
+apiRouter.use(ApiPaths.ARTIST, artistRouter);
+apiRouter.use(ApiPaths.LIBRARY, libraryRouter);
+
 app.use(prefix, apiRouter);
 
 app.use((err: any, req: any, res: any, next: any) => {
+    console.trace("Final error handler");
     return res.status(500).json({ message: `Unexpected error: "${err.message ?? ''}"` });
 });
 

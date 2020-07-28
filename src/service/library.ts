@@ -1,0 +1,44 @@
+import { Library } from '../model';
+
+class LibraryService {
+
+    get() { return Library.db; }
+
+    findOne(condition: (l: Library) => boolean) {
+        return Library.findOne(condition);
+    }
+
+    find(condition: (l: Library) => boolean,
+         paging: { page: number; length: number } | null = null) {
+        return Library.find(condition, paging);
+    }
+
+    insert(library: Library): boolean {
+        return Library.insert(library);
+    }
+
+    insertMany(libraries: Library[] | null): boolean {
+        let inserted = true;
+        libraries?.forEach(library => { inserted = inserted && (Library.insert(library)); });
+        return inserted;
+    }
+
+    updateOne(condition: (l: Library) => boolean, action: (toBeUpdated: Library) => void): boolean {
+        return Library.update(condition, action, true);
+    }
+
+    updateMany(condition: (l: Library) => boolean, action: (toBeUpdated: Library) => void): boolean {
+        return Library.update(condition, action);
+    }
+
+    removeOne(condition: (l: Library) => boolean) {
+        return Library.delete(condition, true);
+    }
+
+    removeMany(condition: (l: Library) => boolean) {
+        return Library.delete(condition, false);
+    }
+
+}
+
+export const libraryService = new LibraryService();
