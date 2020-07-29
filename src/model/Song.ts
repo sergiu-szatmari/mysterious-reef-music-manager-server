@@ -82,7 +82,8 @@ export class Song extends SongDb implements IEntity {
     constructor(
         public readonly id: string = generateId(),
         public name: string,
-        public artist: Artist,
+        public artistID: string,
+        // public artist: Artist,
         public duration: number,
         public genre: string,
         public bpm: number) {

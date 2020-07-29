@@ -1,4 +1,4 @@
-export function generateId(length: number = 5): string {
+export function generateId(length: number = 16): string {
 
     const chars: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result: string = '';

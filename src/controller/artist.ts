@@ -6,6 +6,7 @@ import { Artist } from "../model";
 
 export class ArtistController implements IController {
 
+    // host/api/artists
     get: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const result = await artistService.get();
@@ -15,6 +16,7 @@ export class ArtistController implements IController {
         }
     }
 
+    // host/api/artists/id
     getOne: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
@@ -25,11 +27,15 @@ export class ArtistController implements IController {
         }
     }
 
+    // host/api/artists
+    // { name: "Some name", birthDate: "YYYY-MM-DD", originCountry: "Some country" }
     post: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             let { name, birthDate, originCountry } = req.body;
-            birthDate = new Date(birthDate);
 
+            if (!name || !birthDate) throw new Error('Required fields were not provided');
+
+            birthDate = new Date(birthDate);
             const result = await artistService.insert(
                 new Artist(undefined, name, birthDate, originCountry)
             );
@@ -41,13 +47,22 @@ export class ArtistController implements IController {
         }
     }
 
+    // host/api/artists/id
+    // { name: "Other name", birthDate: "YYYY-MM-DD", originCountry: "..." }
     patch: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { id }    = req.params;
-            const { name }  = req.body;
-            const result    = await artistService.updateOne(
+            const { id } = req.params;
+            const { name, birthDate, originCountry } = req.body;
+
+            if (!name || !birthDate) throw new Error('No required fields provided');
+
+            const result = await artistService.updateOne(
                 (a: Artist) => a.id === id,
-                (a: Artist) => a.name = name
+                (a: Artist) => {
+                    a.name = name;
+                    a.birthDate = new Date(birthDate);
+                    if (originCountry) a.originCountry = originCountry;
+                }
             );
 
             if (!result) throw Error('Update (rename artist) failed');
@@ -57,16 +72,17 @@ export class ArtistController implements IController {
         }
     }
 
+    // host/api/artists
     delete: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
             const result = await artistService.removeOne(artist => artist.id === id);
 
-            if (!result) throw Error('Removing artist failed');
-            return res.sendStatus(200);
+            return result ?
+                res.sendStatus(200) :
+                res.status(200).json({ message: `Artist with ID "${id}" does not exist` });
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
         }
     }
-
 }

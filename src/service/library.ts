@@ -1,4 +1,4 @@
-import { Library } from '../model';
+import {Library, Playlist} from '../model';
 
 class LibraryService {
 
@@ -39,6 +39,26 @@ class LibraryService {
         return Library.delete(condition, false);
     }
 
+    addPlaylist(libraryID: string, playlistID: string): boolean {
+
+        const playlist = Playlist.findOne(pl => pl.id === playlistID);
+        if (!playlist) return false;
+
+        Library.db.forEach(lib => {
+            if (lib.id === libraryID) {
+                lib.insertPlaylist(playlist);
+            }
+        })
+
+        return true;
+    }
+
+    removePlaylist(libraryID: string, playlistID: string): boolean {
+        Library.db.forEach(lib => {
+            if (lib.id === libraryID) return lib.removePlaylist(playlistID);
+        })
+        return false;
+    }
 }
 
 export const libraryService = new LibraryService();

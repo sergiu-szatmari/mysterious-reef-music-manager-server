@@ -6,6 +6,7 @@ import { songService } from '../service';
 
 export class SongController implements IController {
 
+    // host/api/songs/
     get: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const result = await songService.get();
@@ -15,6 +16,7 @@ export class SongController implements IController {
         }
     }
 
+    // host/api/songs/someidvalue
     getOne: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
@@ -25,21 +27,23 @@ export class SongController implements IController {
         }
     }
 
+    // host/api/songs
+    // { name: "...", duration: 123, genre: "...", bpm: 123,
+    //   aristId: someidvalue / artist: Artist }
     post: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            let { name, artistId, duration, genre, bpm } = req.body;
-            let { artist } = req.body;
+            const { name, artistID, duration, genre, bpm } = req.body;
 
-            console.log(artist);
+            if (!name || !artistID || !duration || !genre || !bpm) throw new Error('Not all required fields were provided');
 
-            artist = artistId ?
-                Artist.findOne(artist => artist.id === artistId) :
-                artist;
+            const artist = Artist.findOne(artist => artist.id === artistID);
 
-            artist = new Artist(artist.id ?? undefined, artist.name, artist.birthDate, artist.originCountry);
+            if (!artist) throw new Error('No artist with provided ID was found');
+
+            // artist = new Artist(artist.id ?? undefined, artist.name, artist.birthDate, artist.originCountry);
 
             const result = await songService.insert(
-                new Song(undefined, name, artist, duration, genre, bpm)
+                new Song(undefined, name, artistID, duration, genre, bpm)
             );
 
             if (!result) throw new Error('Insert failed');
@@ -52,10 +56,15 @@ export class SongController implements IController {
     patch: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id }    = req.params;
-            const { name }  = req.body;
+            const { name, duration, genre, bpm }  = req.body;
             const result    = await songService.updateOne(
                 (s: Song) => s.id === id,
-                (s: Song) => s.name = name
+                (s: Song) => {
+                    if (name) s.name = name;
+                    if (duration) s.duration = duration;
+                    if (genre) s.genre = genre;
+                    if (bpm) s.bpm = bpm;
+                }
             );
 
             if (!result) throw Error('Update (rename song) failed');

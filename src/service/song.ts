@@ -14,12 +14,13 @@ class SongService {
     }
 
     insert(song: Song): boolean {
-        const artist: Artist = song.artist;
+        // const artist: Artist = song.artist;
+        // const artistID: string = song.artistID;
 
         // Inserts artist too, if doesn't exists
-        if (!Artist.findOne(a => a.id === artist.id)) {
-            Artist.insert(artist);
-        }
+        // if (!Artist.findOne(a => a.id === artistID)) {
+        //     Artist.insert(artist);
+        // }
 
         return Song.insert(song);
     }

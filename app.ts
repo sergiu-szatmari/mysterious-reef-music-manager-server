@@ -1,13 +1,16 @@
 import 'dotenv/config';
 
-import express, { Express, Router } from 'express';
-import path from 'path';
+import express, { Express, NextFunction, Request, Response, Router } from 'express';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 
-import { ApiPaths } from './src/util';
+import { ApiPaths, insertMockData } from './src/util';
 import { playlistRouter, songRouter,
     artistRouter, libraryRouter } from './src/routes';
+
+// ============= MOCK DATA =============
+insertMockData();
+// =====================================
 
 const app: Express = express();
 const prefix: string = process.env.PREFIX || '/backupApi';
@@ -29,7 +32,7 @@ apiRouter.use(ApiPaths.LIBRARY, libraryRouter);
 
 app.use(prefix, apiRouter);
 
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.trace("Final error handler");
     return res.status(500).json({ message: `Unexpected error: "${err.message ?? ''}"` });
 });

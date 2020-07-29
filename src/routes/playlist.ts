@@ -9,6 +9,11 @@ router.use(Logger.logRoutes);
 
 router.get('/', Controller.PlaylistController.get);
 router.get('/:id', Controller.PlaylistController.getOne);
+
 router.post('/', Controller.PlaylistController.post);
+router.post('/:id', Controller.PlaylistController.insertSong);
+
 router.patch('/:id', Controller.PlaylistController.patch);
+
 router.delete('/:id', Controller.PlaylistController.delete);
+router.delete('/:id/:songID', Controller.PlaylistController.removeSong);

@@ -1,2 +1,2 @@
 export { generateId, greet, ApiPaths } from './utils';
-export { mockData } from './mock';
+export { insertMockData } from './mock';
