@@ -20,7 +20,7 @@ export class PlaylistController implements IController {
     getOne: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            const result = await playlistService.findOne(playlist => playlist.id === id);
+            const result = await playlistService.findOne(id);
 
             return result ?
                 res.status(200).json(result) :
@@ -32,14 +32,13 @@ export class PlaylistController implements IController {
 
     // host/api/playlist
     // { "name": "newPlaylistName" }
+    // { "name": "newPlaylistName", "songIDs": [ "id1", "id2", ... ] }
     post: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            let { name } = req.body;
-
+            const { name, songIDs } = req.body;
             if (!name) throw new Error('No playlist name provided');
 
-            const result = await playlistService.insert(new Playlist(undefined, name));
-
+            const result = await playlistService.insert(name, songIDs);
             if (!result) throw new Error('Insert failed');
             return res.sendStatus(200);
         } catch (err) {
@@ -67,54 +66,54 @@ export class PlaylistController implements IController {
     // host/api/playlists
     // { "name": "renamePlaylist" }
     patch: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { id }    = req.params;
-            const { name }  = req.body;
-
-            if (!name) throw new Error('No name provided');
-
-            const result    = await playlistService.updateOne(
-                (pl: Playlist) => pl.id === id,
-                (pl: Playlist) => pl.name = name
-            );
-
-            if (!result) throw Error('Update (rename playlist) failed');
-            return res.sendStatus(200);
-        } catch (err) {
-            next(`Exception occurred: ${err.message}`)
-        }
+        // try {
+        //     const { id }    = req.params;
+        //     const { name }  = req.body;
+        //
+        //     if (!name) throw new Error('No name provided');
+        //
+        //     const result    = await playlistService.updateOne(
+        //         (pl: Playlist) => pl.id === id,
+        //         (pl: Playlist) => pl.name = name
+        //     );
+        //
+        //     if (!result) throw Error('Update (rename playlist) failed');
+        //     return res.sendStatus(200);
+        // } catch (err) {
+        //     next(`Exception occurred: ${err.message}`)
+        // }
     }
 
     // host/api/playlists/id
     delete: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            const result = await playlistService.removeOne(playlist => playlist.id === id);
+            const result = await playlistService.removeOne(id);
 
             return result ?
                 res.sendStatus(200) :
-                res.status(200).json({ message: `Playlist with ID "${id} does not exist` });
+                res.status(404).json({ message: `Playlist with ID "${id} does not exist` });
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
         }
     }
 
     removeSong: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { id, songID } = req.params;
-            if (!id || !songID) throw new Error('Required params missing (playlist id, song id)');
-
-            let errMsg = !Playlist.findOne(p => p.id === id) ?
-                `Playlist with ID "${id}" was not found` : (
-                    !Song.findOne(s => s.id === songID) ?
-                        `Song with ID "${songID}" was not found` : ''
-                );
-            if (!!errMsg) throw new Error(errMsg);
-
-            await playlistService.removeSong(id, songID);
-            return res.sendStatus(200);
-        } catch (err) {
-            next(`Error occured: "${err.message}"`);
-        }
+        // try {
+        //     const { id, songID } = req.params;
+        //     if (!id || !songID) throw new Error('Required params missing (playlist id, song id)');
+        //
+        //     // let errMsg = !Playlist.findOne(p => p.id === id) ?
+        //     //     `Playlist with ID "${id}" was not found` : (
+        //     //         !Song.findOne(s => s.id === songID) ?
+        //     //             `Song with ID "${songID}" was not found` : ''
+        //     //     );
+        //     // if (!!errMsg) throw new Error(errMsg);
+        //
+        //     await playlistService.removeSong(id, songID);
+        //     return res.sendStatus(200);
+        // } catch (err) {
+        //     next(`Error occured: "${err.message}"`);
+        // }
     }
 }

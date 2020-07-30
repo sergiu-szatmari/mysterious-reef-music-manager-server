@@ -102,12 +102,12 @@ export class LibraryController implements IController {
         try {
             const { id, playlistID } = req.params;
 
-            let errMsg = !Library.findOne(lib => lib.id === id) ?
-                `Library with ID "${id}" was not found` : (
-                    !Playlist.findOne(pl => pl.id === playlistID) ?
-                        `Playlist with ID "${playlistID}" was not found` : ''
-                );
-            if (!!errMsg) throw new Error(errMsg);
+            // let errMsg = !Library.findOne(lib => lib.id === id) ?
+            //     `Library with ID "${id}" was not found` : (
+            //         !Playlist.findOne(pl => pl.id === playlistID) ?
+            //             `Playlist with ID "${playlistID}" was not found` : ''
+            //     );
+            // if (!!errMsg) throw new Error(errMsg);
 
             await libraryService.removePlaylist(id, playlistID);
             return res.sendStatus(200);

@@ -41,12 +41,12 @@ class LibraryService {
 
     addPlaylist(libraryID: string, playlistID: string): boolean {
 
-        const playlist = Playlist.findOne(pl => pl.id === playlistID);
-        if (!playlist) return false;
+        // const playlist = Playlist.findOne(pl => pl.id === playlistID);
+        // if (!playlist) return false;
 
         Library.db.forEach(lib => {
             if (lib.id === libraryID) {
-                lib.insertPlaylist(playlist);
+                // lib.insertPlaylist(playlist);
             }
         })
 
@@ -55,7 +55,7 @@ class LibraryService {
 
     removePlaylist(libraryID: string, playlistID: string): boolean {
         Library.db.forEach(lib => {
-            if (lib.id === libraryID) return lib.removePlaylist(playlistID);
+            // if (lib.id === libraryID) return lib.removePlaylist(playlistID);
         })
         return false;
     }

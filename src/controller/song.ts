@@ -2,7 +2,8 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { Artist, Song } from '../model';
 import { IController } from '../interface';
-import { songService } from '../service';
+import {artistService, songService} from '../service';
+import {Document} from "mongoose";
 
 export class SongController implements IController {
 
@@ -16,11 +17,13 @@ export class SongController implements IController {
         }
     }
 
-    // host/api/songs/someidvalue
+    // host/api/songs/:id
     getOne: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            const result = await songService.findOne(song => song.id === id);
+            const result = await songService.findOne(id);
+            console.log("Controller -> Result: ");
+            console.log(result);
             return res.status(200).json(result);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
@@ -28,23 +31,14 @@ export class SongController implements IController {
     }
 
     // host/api/songs
-    // { name: "...", duration: 123, genre: "...", bpm: 123,
-    //   aristId: someidvalue / artist: Artist }
+    // { name: "...", duration: 123, genre: "...", bpm: 123, artistID: ID }
     post: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { name, artistID, duration, genre, bpm } = req.body;
 
             if (!name || !artistID || !duration || !genre || !bpm) throw new Error('Not all required fields were provided');
 
-            const artist = Artist.findOne(artist => artist.id === artistID);
-
-            if (!artist) throw new Error('No artist with provided ID was found');
-
-            // artist = new Artist(artist.id ?? undefined, artist.name, artist.birthDate, artist.originCountry);
-
-            const result = await songService.insert(
-                new Song(undefined, name, artistID, duration, genre, bpm)
-            );
+            const result = await songService.insert(name, artistID, duration, genre, bpm);
 
             if (!result) throw new Error('Insert failed');
             return res.sendStatus(200);
@@ -54,32 +48,16 @@ export class SongController implements IController {
     }
 
     patch: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { id }    = req.params;
-            const { name, duration, genre, bpm }  = req.body;
-            const result    = await songService.updateOne(
-                (s: Song) => s.id === id,
-                (s: Song) => {
-                    if (name) s.name = name;
-                    if (duration) s.duration = duration;
-                    if (genre) s.genre = genre;
-                    if (bpm) s.bpm = bpm;
-                }
-            );
-
-            if (!result) throw Error('Update (rename song) failed');
-            return res.sendStatus(200);
-        } catch (err) {
-            next(`Exception occurred: ${err.message}`)
-        }
+        next();
     }
 
     delete: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            const result = await songService.removeOne(song => song.id === id);
+            //const result =
+            await songService.removeOne(id);
 
-            if (!result) throw Error('Removing song failed');
+            // if (!result) throw Error('Removing song failed');
             return res.sendStatus(200);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)

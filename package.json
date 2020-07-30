@@ -1,6 +1,6 @@
 {
-  "name": "week2",
-  "version": "0.0.0",
+  "name": "my-music-app",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -9,12 +9,14 @@
   "dependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.7",
+    "@types/mongoose": "^5.7.34",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.0.26",
     "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "mongoose": "^5.9.26",
     "morgan": "~1.9.1"
   }
 }

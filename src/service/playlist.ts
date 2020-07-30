@@ -1,65 +1,40 @@
+import {Document, Types} from 'mongoose';
+
 import {Playlist, Song} from '../model';
 
 class PlaylistService {
 
-    get() { return Playlist.db; }
-
-    findOne(condition: (playlist: Playlist) => boolean) {
-        return Playlist.findOne(condition);
+    async get() {
+        return Playlist.find();
     }
 
-    find(condition: (playlist: Playlist) => boolean,
-         paging: { page: number; length: number } | null = null) {
-        return Playlist.find(condition, paging);
+    async findOne(id: string) {
+        return Playlist.findOne({ _id: Types.ObjectId(id) });
     }
 
-    insert(playlist: Playlist): boolean {
-        return Playlist.insert(playlist);
-    }
-
-    insertMany(playlists: Playlist[] | null): boolean {
-        let inserted = true;
-        playlists?.forEach(playlist => { inserted = inserted && (Playlist.insert(playlist)); });
-        return inserted;
-    }
-
-    updateOne(condition: (p: Playlist) => boolean, action: (toBeUpdated: Playlist) => void): boolean {
-        return Playlist.update(condition, action, true);
-    }
-
-    updateMany(condition: (p: Playlist) => boolean, action: (toBeUpdated: Playlist) => void): boolean {
-        return Playlist.update(condition, action);
-    }
-
-    removeOne(condition: (p: Playlist) => boolean) {
-        return Playlist.delete(condition, true);
-    }
-
-    removeMany(condition: (p: Playlist) => boolean) {
-        return Playlist.delete(condition, false);
-    }
-
-    addSong(playlistID: string, songID: string): boolean {
-
-        // if (!Song.exists(song)) return false;
-
-        const song = Song.findOne(s => s.id === songID);
-        if (!song) return false;
-
-        Playlist.db.forEach(pl => {
-            if (pl.id === playlistID) {
-                pl.insertSong(song);
+    async insert(name: string, songIDs: string[] | null = null): Promise<Document> {
+        let songs: any[] = [];
+        if (!!songIDs) {
+            for (let i = 0; i < songIDs.length; i++) {
+                let id = Types.ObjectId(songIDs[i]);
+                let song = await Song.findOne({ _id: id });
+                if (!!song) songs.push(song);
             }
-        })
 
+        }
+        return (new Playlist({ name: name, songs: songs })).save();
+    }
+
+    async removeOne(id: string) {
+        return Playlist.deleteOne({ _id: Types.ObjectId(id) });
+    }
+
+    async addSong(playlistID: string, songID: string): Promise<boolean> {
         return true;
     }
 
     removeSong(playlistID: string, songID: string): boolean {
-        Playlist.db.forEach(playlist => {
-            if (playlist.id === playlistID) return playlist.removeSong(songID);
-        })
-        return false;
+        return true;
     }
 }
 

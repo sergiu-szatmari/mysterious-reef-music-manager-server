@@ -33,6 +33,7 @@ apiRouter.use(ApiPaths.LIBRARY, libraryRouter);
 app.use(prefix, apiRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.log(err.message);
     console.trace("Final error handler");
     return res.status(500).json({ message: `Unexpected error: "${err.message ?? ''}"` });
 });

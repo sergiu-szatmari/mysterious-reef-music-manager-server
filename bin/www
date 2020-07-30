@@ -3,16 +3,27 @@
 const { app } = require('../build/app');
 const debug = require('debug')('myapp:server');
 const http = require('http');
+const mongoose = require('mongoose');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const server = http.createServer(app);
 
+mongoose.connect(
+    process.env.DB_CONNECTION_URL,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+      console.log('Successfully connected to Mongo DB');
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+      server.listen(port);
+      server.on('error', onError);
+      server.on('listening', onListening);
+    }
+)
+// server.listen(port);
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 /** port ==> number | string | false  */
 function normalizePort(val) {

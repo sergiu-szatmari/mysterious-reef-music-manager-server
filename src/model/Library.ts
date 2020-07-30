@@ -78,33 +78,33 @@ abstract class LibraryDb {
 
 export class Library  extends LibraryDb implements IEntity {
 
-    public readonly playlists: Playlist[];
+    // public readonly playlists: Playlist[];
 
     constructor(
         public readonly id: string = generateId(),
         public name: string) {
 
         super();
-        this.playlists = Array();
+        // this.playlists = Array();
     }
-
-    playlistExists(playlist: Playlist): boolean {
-        return this.playlists.indexOf(playlist) !== -1;
-    }
-
-    insertPlaylist(pl: Playlist): boolean {
-        if (this.playlistExists(pl)) return false;
-
-        this.playlists.push(pl);
-        return true;
-    }
-
-    removePlaylist(playlistID: string): boolean {
-        const idx: number = this.playlists.findIndex(pl => pl.id === playlistID);
-        if (idx < 0) return false;
-
-        this.playlists.splice(idx, 1);
-        return true;
-
-    }
+    //
+    // playlistExists(playlist: Playlist): boolean {
+    //     return this.playlists.indexOf(playlist) !== -1;
+    // }
+    //
+    // insertPlaylist(pl: Playlist): boolean {
+    //     if (this.playlistExists(pl)) return false;
+    //
+    //     this.playlists.push(pl);
+    //     return true;
+    // }
+    //
+    // removePlaylist(playlistID: string): boolean {
+    //     const idx: number = this.playlists.findIndex(pl => pl.id === playlistID);
+    //     if (idx < 0) return false;
+    //
+    //     this.playlists.splice(idx, 1);
+    //     return true;
+    //
+    // }
 }
