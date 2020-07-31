@@ -12,3 +12,10 @@ export class RequestValidator {
         next();
     })
 }
+
+export class MongoDBValidator {
+
+    static validateString: (input: string) => boolean = (input) => { return /^[a-zA-Z\-]$/i.test(input); };
+
+
+}

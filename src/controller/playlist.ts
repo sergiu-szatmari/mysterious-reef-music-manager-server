@@ -16,7 +16,7 @@ export class PlaylistController implements IController {
         }
     }
 
-    // host/api/playlists/someidvalue
+    // host/api/playlists/:id
     getOne: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
@@ -39,14 +39,14 @@ export class PlaylistController implements IController {
             if (!name) throw new Error('No playlist name provided');
 
             const result = await playlistService.insert(name, songIDs);
-            if (!result) throw new Error('Insert failed');
+
             return res.sendStatus(200);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
         }
     }
 
-    // host/api/songs/id
+    // host/api/songs/:id
     // { "songID": "someID" }
     insertSong: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -63,25 +63,22 @@ export class PlaylistController implements IController {
         }
     }
 
-    // host/api/playlists
+    // host/api/playlists/:id
     // { "name": "renamePlaylist" }
     patch: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-        // try {
-        //     const { id }    = req.params;
-        //     const { name }  = req.body;
-        //
-        //     if (!name) throw new Error('No name provided');
-        //
-        //     const result    = await playlistService.updateOne(
-        //         (pl: Playlist) => pl.id === id,
-        //         (pl: Playlist) => pl.name = name
-        //     );
-        //
-        //     if (!result) throw Error('Update (rename playlist) failed');
-        //     return res.sendStatus(200);
-        // } catch (err) {
-        //     next(`Exception occurred: ${err.message}`)
-        // }
+        try {
+            const { id }    = req.params;
+            const { name }  = req.body;
+
+            if (!name) throw new Error('No name provided');
+
+            const result = await playlistService.renamePlaylist(id, name);
+
+            if (!result) throw Error('Update (rename playlist) failed');
+            return res.sendStatus(200);
+        } catch (err) {
+            next(`Exception occurred: ${err.message}`)
+        }
     }
 
     // host/api/playlists/id

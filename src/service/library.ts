@@ -1,63 +1,40 @@
+import { Document, Types } from 'mongoose';
 import {Library, Playlist} from '../model';
 
 class LibraryService {
 
-    get() { return Library.db; }
-
-    findOne(condition: (l: Library) => boolean) {
-        return Library.findOne(condition);
+    async get() {
+        return Library.find();
     }
 
-    find(condition: (l: Library) => boolean,
-         paging: { page: number; length: number } | null = null) {
-        return Library.find(condition, paging);
+    async findOne(id: string) {
+        return Library.findOne({ _id: Types.ObjectId(id) });
     }
 
-    insert(library: Library): boolean {
-        return Library.insert(library);
-    }
-
-    insertMany(libraries: Library[] | null): boolean {
-        let inserted = true;
-        libraries?.forEach(library => { inserted = inserted && (Library.insert(library)); });
-        return inserted;
-    }
-
-    updateOne(condition: (l: Library) => boolean, action: (toBeUpdated: Library) => void): boolean {
-        return Library.update(condition, action, true);
-    }
-
-    updateMany(condition: (l: Library) => boolean, action: (toBeUpdated: Library) => void): boolean {
-        return Library.update(condition, action);
-    }
-
-    removeOne(condition: (l: Library) => boolean) {
-        return Library.delete(condition, true);
-    }
-
-    removeMany(condition: (l: Library) => boolean) {
-        return Library.delete(condition, false);
-    }
-
-    addPlaylist(libraryID: string, playlistID: string): boolean {
-
-        // const playlist = Playlist.findOne(pl => pl.id === playlistID);
-        // if (!playlist) return false;
-
-        Library.db.forEach(lib => {
-            if (lib.id === libraryID) {
-                // lib.insertPlaylist(playlist);
+    async insert(name: string, playlistIDs: string[] | null = null): Promise<Document> {
+        let playlists: any[] = [];
+        if (!!playlistIDs) {
+            for (let i = 0; i < playlistIDs.length; i++) {
+                let id = Types.ObjectId(playlistIDs[i]);
+                let playlist = await Playlist.findOne({ _id: id });
+                if (!!playlist) playlists.push(playlist);
             }
-        })
+        }
 
-        return true;
+        return (new Library({ name: name, playlists: playlists })).save();
     }
 
-    removePlaylist(libraryID: string, playlistID: string): boolean {
-        Library.db.forEach(lib => {
-            // if (lib.id === libraryID) return lib.removePlaylist(playlistID);
-        })
-        return false;
+    async removeOne(id: string) {
+        return Library.deleteOne({ _id: Types.ObjectId(id) });
+    }
+
+    async addPlaylist(libraryID: string, playlistID: string) {
+
+        if (!Library.findOne({ _id: libraryID }) ||
+            !Playlist.findOne({ _id: playlistID })) return false;
+
+        await Library.updateOne({ _id: libraryID }, { $push: { playlists: new Types.ObjectId(playlistID) }})
+        return true;
     }
 }
 

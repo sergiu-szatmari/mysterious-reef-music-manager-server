@@ -1,6 +1,6 @@
 import {Document, Types} from 'mongoose';
 
-import {Playlist, Song} from '../model';
+import { Playlist, Song, SongCollectionName } from '../model';
 
 class PlaylistService {
 
@@ -9,16 +9,21 @@ class PlaylistService {
     }
 
     async findOne(id: string) {
-        return Playlist.findOne({ _id: Types.ObjectId(id) });
+
+        return Playlist.aggregate([
+            { $match: { _id: id } },
+            { $lookup: { from: SongCollectionName, localField: 'songs', foreignField: '_id', as: 'songs' } },
+            { $unwind: { path: '$song', preserveNullAndEmptyArrays: true } }
+        ]);
     }
 
     async insert(name: string, songIDs: string[] | null = null): Promise<Document> {
-        let songs: any[] = [];
+        let songs: Types.ObjectId[] = [];
         if (!!songIDs) {
             for (let i = 0; i < songIDs.length; i++) {
                 let id = Types.ObjectId(songIDs[i]);
                 let song = await Song.findOne({ _id: id });
-                if (!!song) songs.push(song);
+                if (!!song) songs.push( new Types.ObjectId(id) );
             }
 
         }
@@ -30,11 +35,16 @@ class PlaylistService {
     }
 
     async addSong(playlistID: string, songID: string): Promise<boolean> {
-        return true;
+
+        if (!Song.findOne({ _id: songID }) ||
+            !Playlist.findOne({ _id: playlistID })) return false;
+
+        const newSongID = new Types.ObjectId(songID);
+        return Playlist.updateOne({ _id: playlistID }, { $push: { songs: newSongID }});
     }
 
-    removeSong(playlistID: string, songID: string): boolean {
-        return true;
+    async renamePlaylist(id: string, name: string): Promise<Document> {
+        return Playlist.updateOne({ _id: Types.ObjectId(id) }, { name: name });
     }
 }
 

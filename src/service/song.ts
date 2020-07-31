@@ -1,14 +1,13 @@
-import mongoose, {Types, Document, Query} from 'mongoose';
+import mongoose, { Types, Document } from 'mongoose';
 
-import { Artist, Song } from '../model';
+import { Song } from '../model';
 import { artistService } from './artist';
 
 class SongService {
 
     async get() {
         try {
-            const songs = await Song.find();
-            return songs;
+            return Song.find();
         } catch (err) {
             return [];
         }
@@ -16,17 +15,13 @@ class SongService {
 
     async findOne(id: string) {
         try {
-            const song = await Song.findOne({
-                _id: mongoose.Types.ObjectId(id)
-            });
-            return song;
+            return Song.findOne({ _id: Types.ObjectId(id) });
         } catch (err) {
             return null;
         }
     }
 
     async insert(name: string, artistID: string, duration: number, genre: string, bpm: number): Promise<Document> {
-
         const artist = await artistService.findOne(artistID);
 
         if (!artist) throw new Error('No artist with provided ID was found');

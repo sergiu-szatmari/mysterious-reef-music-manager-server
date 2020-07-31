@@ -1,5 +1,5 @@
-export { ArtistSchema, Artist } from './Artist';
-export { SongSchema, Song } from './Song';
-export { PlaylistSchema, Playlist } from './Playlist';
-export { Library } from './Library';
+export { ArtistSchema, Artist, ArtistCollectionName } from './Artist';
+export { SongSchema, Song, SongCollectionName } from './Song';
+export { PlaylistSchema, Playlist, PlaylistCollectionName } from './Playlist';
+export { Library, LibraryCollectionName } from './Library';
 export { AppResultStatus } from './AppResultStatus';
