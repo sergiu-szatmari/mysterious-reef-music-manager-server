@@ -1,0 +1,13 @@
+{
+  "General": {
+    "dbConfig": {
+      "connectionURL": "mongodb://[...]:[...]@[...]:123/[...]",
+      "collectionPrefix": "-"
+    },
+    "serverConfig": {
+      "port": "3000",
+      "apiPrefix": "/api"
+    },
+    "secret": "Secret found in 'sample.json' file"
+  }
+}

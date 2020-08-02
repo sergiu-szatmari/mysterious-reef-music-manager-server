@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
+import config from 'config';
 
-export const LibraryCollectionName: string = `${process.env.DB_COLLECTION_NAME_PREFIX || 'sergiu-'}libraries`;
+export const LibraryCollectionName: string = `${config.get('General.dbConfig.collectionPrefix')}libraries`;
 export const LibrarySchema: Schema = new Schema({
     name: { type: String, required: true },
     playlists: [{ type: Schema.Types.ObjectId } ]

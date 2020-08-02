@@ -1,7 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
+import config from 'config';
+
 import { MongoDBValidator } from '../middleware';
 
-export const SongCollectionName: string = `${process.env.DB_COLLECTION_NAME_PREFIX || 'sergiu-'}songs`;
+export const SongCollectionName: string = `${config.get('General.dbConfig.collectionPrefix')}songs`;
 export const SongSchema: Schema = new Schema({
     name: {
         type: String,

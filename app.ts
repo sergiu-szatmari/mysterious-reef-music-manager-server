@@ -3,17 +3,14 @@ import 'dotenv/config';
 import express, { Express, NextFunction, Request, Response, Router } from 'express';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
+import config from 'config';
 
-import { ApiPaths, insertMockData } from './src/util';
+import { ApiPaths } from './src/util';
 import { playlistRouter, songRouter,
     artistRouter, libraryRouter } from './src/routes';
 
-// ============= MOCK DATA =============
-insertMockData();
-// =====================================
-
 const app: Express = express();
-const prefix: string = process.env.PREFIX || '/backupApi';
+const prefix: string = config.get('General.serverConfig.apiPrefix');
 
 app.use(logger('dev'));
 
