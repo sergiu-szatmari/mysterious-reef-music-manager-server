@@ -11,6 +11,7 @@ const app: Express = express();
 const prefix: string = config.get('General.serverConfig.apiPrefix');
 
 const secret: string = config.get('General.secret');
+console.log(secret);
 
 app.use(logger('dev'));
 
