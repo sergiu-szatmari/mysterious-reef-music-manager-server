@@ -9,7 +9,7 @@ import config from 'config';
 const dbConnectionURL: string = config.get('General.dbConfig.connectionURL');
 const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
-const port = normalizePort(config.get('General.serverConfig.port')) || 5000;
+const port = normalizePort(config.get('General.serverConfig.port'));
 app.set('port', port);
 
 const server: Server = http.createServer(app);
