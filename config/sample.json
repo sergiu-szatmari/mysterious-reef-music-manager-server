@@ -1,7 +1,7 @@
 {
   "General": {
     "dbConfig": {
-      "connectionURL": "mongodb://[...]:[...]@[...]:123/[...]",
+      "connectionURL": "[...]://[...]:[...]@[...]:123/[...]",
       "collectionPrefix": "-"
     },
     "serverConfig": {

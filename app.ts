@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 import express, { Express, NextFunction, Request, Response, Router } from 'express';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
@@ -11,6 +9,8 @@ import { playlistRouter, songRouter,
 
 const app: Express = express();
 const prefix: string = config.get('General.serverConfig.apiPrefix');
+
+const secret: string = config.get('General.secret');
 
 app.use(logger('dev'));
 

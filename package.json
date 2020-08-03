@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "clear && npm run build && node ./bin/www"
+    "start": "clear && npm run build && node ./build/bin/www"
   },
   "dependencies": {
     "config": "^3.3.1",
