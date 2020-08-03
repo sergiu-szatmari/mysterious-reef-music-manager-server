@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "clear && npm run build && node ./build/bin/www"
+    "dev": "clear && npm run build && npm start",
+    "postinstall": "npm run build",
+    "start": "node ./build/bin/www"
   },
   "dependencies": {
     "config": "^3.3.1",
