@@ -52,7 +52,7 @@ export class ArtistController implements IController {
 
             return res.status(200).json(result);
         } catch (err) {
-            console.error('Required fields were not provided')
+            console.error(err.message)
             next(`Exception occurred: ${err.message}`)
         }
     }
