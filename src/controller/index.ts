@@ -18,7 +18,7 @@ class MainController {
     errorHandler: ErrorRequestHandler = async (err: any, req: Request, res: Response, next: NextFunction) => {
         console.log(err.message);
         console.trace("Final error handler");
-        return res.status(500).json({ message: `Unexpected error: "${err.message ?? ''}"` });
+        return res.status(500).json({ message: `Unexpected error: '${err.message}'` });
     }
 }
 

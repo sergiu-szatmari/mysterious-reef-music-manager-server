@@ -34,7 +34,10 @@ export class ArtistController implements IController {
         try {
             let { name, birthDate, originCountry } = req.body;
 
-            if (!name || !birthDate) throw new Error('Required fields were not provided');
+            if (!name || !birthDate) {
+
+                throw new Error('Required fields were not provided');
+            }
 
             birthDate = new Date(birthDate);
 
@@ -43,6 +46,7 @@ export class ArtistController implements IController {
 
             return res.status(200).json(result);
         } catch (err) {
+            console.error('Required fields were not provided')
             next(`Exception occurred: ${err.message}`)
         }
     }
