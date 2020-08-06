@@ -34,10 +34,6 @@ export class ArtistController implements IController {
         try {
             let { name, birthDate, originCountry } = req.body;
 
-            console.log({name});
-            console.log({birthDate});
-            console.log({originCountry});
-
             const msg = !name ? 'Name not provided' :
                 !birthDate ? 'Birth date not provided' : '';
 
@@ -48,7 +44,6 @@ export class ArtistController implements IController {
             birthDate = new Date(birthDate);
 
             const result = await artistService.insert(name, birthDate, originCountry);
-            // if (!result) throw new Error('Insert failed');
 
             return res.status(200).json(result);
         } catch (err) {
