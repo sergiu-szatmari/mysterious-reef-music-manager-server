@@ -8,19 +8,19 @@ export const SongSchema: Schema = new Schema({
     name: {
         type: String,
         required: [true, 'Song\'s name is required'],
-        validate: {
-            validator: MongoDBValidator.validateString,
-            message: props => `${props.value} is invalid`
-        }
+        // validate: {
+        //     validator: MongoDBValidator.validateString,
+        //     message: props => `${props.value} is invalid`
+        // }
     },
     duration: { type: Number, required: [true, 'Song\'s duration is required'] },
     genre: [{
         type: String,
         required: [true, 'Song\'s genre is required'],
-        validate: {
-            validator: MongoDBValidator.validateString,
-            message: (props: any) => `${props.value} is invalid`
-        }
+        // validate: {
+        //     validator: MongoDBValidator.validateString,
+        //     message: (props: any) => `${props.value} is invalid`
+        // }
     }],
     bpm: { type: Number, required: [true, 'Song\'s bpm is required'] },
     artistID: { type: Schema.Types.ObjectId, required: [true, 'Song\'s artistID is required'] },
