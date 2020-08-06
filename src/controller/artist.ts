@@ -38,9 +38,11 @@ export class ArtistController implements IController {
             console.log({birthDate});
             console.log({originCountry});
 
-            if (!name || !birthDate) {
+            const msg = !name ? 'Name not provided' :
+                !birthDate ? 'Birth date not provided' : '';
 
-                throw new Error('Required fields were not provided');
+            if (!!msg) {
+                throw new Error(msg);
             }
 
             birthDate = new Date(birthDate);
