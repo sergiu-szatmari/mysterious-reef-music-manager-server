@@ -6,6 +6,7 @@ import debug from 'debug';
 debug('myapp:server');
 
 import http, { Server } from 'http';
+import cors from 'cors';
 import mongoose from 'mongoose';
 
 import { Controller } from './src/controller';
@@ -28,6 +29,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.get('/', Controller.baseURL);
 
