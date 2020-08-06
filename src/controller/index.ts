@@ -12,7 +12,7 @@ class MainController {
     public readonly LibraryController: LibraryController = new LibraryController();
 
     baseURL: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-        return res.status(200).json({ message: 'Welcome to MyMusicApp'})
+        return res.status(200).json({ message: 'Welcome to Mysterious Reef Music Manager Server'})
     }
 
     errorHandler: ErrorRequestHandler = async (err: any, req: Request, res: Response, next: NextFunction) => {
