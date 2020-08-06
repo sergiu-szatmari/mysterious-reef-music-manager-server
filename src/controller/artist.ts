@@ -34,6 +34,10 @@ export class ArtistController implements IController {
         try {
             let { name, birthDate, originCountry } = req.body;
 
+            console.log({name});
+            console.log({birthDate});
+            console.log({originCountry});
+
             if (!name || !birthDate) {
 
                 throw new Error('Required fields were not provided');
