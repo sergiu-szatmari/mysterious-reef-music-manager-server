@@ -14,14 +14,14 @@ export const SongSchema: Schema = new Schema({
         }
     },
     duration: { type: Number, required: [true, 'Song\'s duration is required'] },
-    genre: {
+    genre: [{
         type: String,
         required: [true, 'Song\'s genre is required'],
         validate: {
             validator: MongoDBValidator.validateString,
-            message: props => `${props.value} is invalid`
+            message: (props: any) => `${props.value} is invalid`
         }
-    },
+    }],
     bpm: { type: Number, required: [true, 'Song\'s bpm is required'] },
     artistID: { type: Schema.Types.ObjectId, required: [true, 'Song\'s artistID is required'] },
     dateAdded: { type: Date, default: Date.now }

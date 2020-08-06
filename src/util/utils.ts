@@ -1,5 +1,4 @@
 export function generateId(length: number = 16): string {
-
     const chars: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result: string = '';
 
@@ -11,7 +10,6 @@ export function generateId(length: number = 16): string {
 }
 
 export function greet() {
-
     console.log("Welcome to the TS-Music App");
     console.log();
     console.log();
@@ -19,7 +17,6 @@ export function greet() {
 }
 
 export enum ApiPaths {
-
     PLAYLIST    = '/playlists',
     SONG        = '/songs',
     ARTIST      = '/artists',

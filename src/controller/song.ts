@@ -37,6 +37,7 @@ export class SongController implements IController {
             const { name, artistID, duration, genre, bpm } = req.body;
 
             if (!name || !artistID || !duration || !genre || !bpm) throw new Error('Not all required fields were provided');
+            if (!Array.isArray(genre)) throw new Error('Invalid genre array');
 
             const result = await songService.insert(name, artistID, duration, genre, bpm);
 
@@ -49,6 +50,23 @@ export class SongController implements IController {
 
     patch: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         next();
+    }
+
+    put: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params;
+            const { name, artistID, duration, genre, bpm } = req.body;
+
+            if (!name || !artistID || !duration || !genre || !bpm) throw new Error('Not all required fields were provided');
+            if (!Array.isArray(genre)) throw new Error('Invalid genre array');
+
+            const result = await songService.updateOne(id, name, artistID, duration, genre, bpm);
+            return !!result ?
+                res.sendStatus(200) :
+                res.sendStatus(404);
+        } catch (err) {
+            next(`Exception occurred: ${err.message}`)
+        }
     }
 
     delete: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {

@@ -81,6 +81,9 @@ export class PlaylistController implements IController {
         }
     }
 
+    put: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+        next();
+    }
     // host/api/playlists/id
     delete: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         try {

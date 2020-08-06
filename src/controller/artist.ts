@@ -39,11 +39,8 @@ export class ArtistController implements IController {
             birthDate = new Date(birthDate);
 
             const result = await artistService.insert(name, birthDate, originCountry);
-
-            // const artist: Document = new Artist({ name, birthDate, originCountry });
-            // const result: Document = await artist.save();
-
             if (!result) throw new Error('Insert failed');
+
             return res.status(200).json(result);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)

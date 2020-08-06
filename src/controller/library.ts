@@ -84,6 +84,10 @@ export class LibraryController implements IController {
         // }
     }
 
+    put: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+        next();
+    }
+
     // host/api/libraries/id
     delete: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
         // try {

@@ -6,7 +6,7 @@
     "build": "tsc",
     "dev": "clear && npm run build && npm start",
     "postinstall": "npm run build",
-    "start": "node ./build/bin/www"
+    "start": "node ./build/app.js"
   },
   "dependencies": {
     "config": "^3.3.1",

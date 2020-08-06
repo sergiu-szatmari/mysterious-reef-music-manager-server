@@ -4,6 +4,6 @@ export interface IController {
     get: RequestHandler;
     getOne: RequestHandler;
     post: RequestHandler;
-    patch: RequestHandler;
+    put: RequestHandler;
     delete: RequestHandler;
 }

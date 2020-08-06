@@ -15,7 +15,7 @@ class ArtistService {
         return (new Artist({ name, birthDate, originCountry })).save();
     }
 
-    async updateOne(id: string, name?: string, birthDate?: Date, originCountry?: string): Promise<Document> {
+    async updateOne(id: string, name: string, birthDate: Date, originCountry: string): Promise<Document> {
         return Artist.updateOne(
             { _id: Types.ObjectId(id) },
             { $set: {
@@ -24,6 +24,10 @@ class ArtistService {
                     originCountry: originCountry,
                 } }
         );
+    }
+
+    async removeOne(id: string) {
+        return Artist.deleteOne({ _id: Types.ObjectId(id) });
     }
 }
 

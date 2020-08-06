@@ -21,20 +21,37 @@ class SongService {
         }
     }
 
-    async insert(name: string, artistID: string, duration: number, genre: string, bpm: number): Promise<Document> {
+    async insert(name: string, artistID: string, duration: number, genre: string[], bpm: number): Promise<Document> {
         const artist = await artistService.findOne(artistID);
 
         if (!artist) throw new Error('No artist with provided ID was found');
 
         const song: Document = new Song({
             name: name,
-            artist: artist,
+            artistID: artistID,
             duration: duration,
             genre: genre,
             bpm: bpm
         });
 
         return await song.save();
+    }
+
+    async updateOne(id: string, name: string, artistID: string, duration: number, genre: string[], bpm: number) {
+        const artist = await artistService.findOne(artistID);
+
+        if (!artist) throw new Error('No artist with provided ID was found');
+
+        return Song.updateOne(
+            { _id: Types.ObjectId(id) },
+            { $set: {
+                name: name,
+                duration: duration,
+                genre: genre,
+                bpm: bpm,
+                artistID: Types.ObjectId(artistID)
+            }}
+        );
     }
 
     async removeOne(id: string) {
