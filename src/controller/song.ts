@@ -41,7 +41,7 @@ export class SongController implements IController {
 
             const result = await songService.insert(name, artistID, duration, genre, bpm);
 
-            if (!result) throw new Error('Insert failed');
+            // if (!result) throw new Error('Insert failed');
             return res.sendStatus(200);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
@@ -61,9 +61,10 @@ export class SongController implements IController {
             if (!Array.isArray(genre)) throw new Error('Invalid genre array');
 
             const result = await songService.updateOne(id, name, artistID, duration, genre, bpm);
-            return !!result ?
-                res.sendStatus(200) :
-                res.sendStatus(404);
+            // return !!result ?
+            //     res.sendStatus(200) :
+            //     res.sendStatus(404);
+            return res.sendStatus(200);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
         }

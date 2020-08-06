@@ -39,7 +39,7 @@ export class ArtistController implements IController {
             birthDate = new Date(birthDate);
 
             const result = await artistService.insert(name, birthDate, originCountry);
-            if (!result) throw new Error('Insert failed');
+            // if (!result) throw new Error('Insert failed');
 
             return res.status(200).json(result);
         } catch (err) {
@@ -62,10 +62,9 @@ export class ArtistController implements IController {
 
             const result = await artistService.updateOne(id, name, birthDate, originCountry);
 
-            if (!result) throw Error('Update (rename artist) failed');
-            return !!result ?
-                res.sendStatus(200) :
-                res.sendStatus(404);
+            // if (!result) throw Error('Update (rename artist) failed');
+            return res.sendStatus(200);
+                // res.sendStatus(404);
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
         }
@@ -78,9 +77,9 @@ export class ArtistController implements IController {
 
             const result = await Artist.deleteOne({ _id: Types.ObjectId(id) });
 
-            return result ?
-                res.status(200).json(result) :
-                res.status(200).json({ message: `Artist with ID "${id}" does not exist` });
+            // return result ?
+            return res.status(200).json(result);
+                // res.status(200).json({ message: `Artist with ID "${id}" does not exist` });
         } catch (err) {
             next(`Exception occurred: ${err.message}`)
         }
