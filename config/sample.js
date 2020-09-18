@@ -1,7 +1,7 @@
 module.exports = {
     General: {
         dbConfig: {
-            connectionURL: 'port://username:password@host:port/dbName',
+            connectionURL: 'mongodb://<username>:<password>@<host>:<port>/<db-name>',
             collectionPrefix: 'prefix-'
         },
         serverConfig: {
