@@ -16,13 +16,10 @@ import { playlistRouter, songRouter,
 
 const app: Express = express();
 const prefix: string = config.get('General.serverConfig.apiPrefix');
-const secret: string = config.get('General.secret');
 const dbConnectionURL: string = config.get('General.dbConfig.connectionURL');
 const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const port = normalizePort(config.get('General.serverConfig.port'));
-
-console.log('Secret:', secret);
 
 app.use(logger('dev'));
 

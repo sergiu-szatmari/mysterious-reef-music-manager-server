@@ -7,7 +7,6 @@ module.exports = {
         serverConfig: {
             port: process.env.PORT || 3000,
             apiPrefix: '/api'
-        },
-        secret: "Secret from 'sample.json' file"
+        }
     }
 }
