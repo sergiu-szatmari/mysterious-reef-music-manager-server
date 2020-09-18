@@ -4,9 +4,10 @@ export class MusicAppLogger {
 
     private static now(): string {
 
-        return new Date().toISOString().
-            replace(/T/, ' ').
-            replace(/\..+/, '');
+        return new Date()
+          .toISOString()
+          .replace(/T/, ' ')
+          .replace(/\..+/, '');
     }
 
     static log(message: string, type: MusicAppLogType = MusicAppLogType.INFO) {
